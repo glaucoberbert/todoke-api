@@ -1,0 +1,8 @@
+# Ambiente virtual do Python (só aparece se um dia rodarmos local)
+.venv/
+venv/
+# Cache do Python
+__pycache__/
+*.pyc
+# Arquivo de segredos (senhas, chaves). NUNCA vai para o GitHub
+.env

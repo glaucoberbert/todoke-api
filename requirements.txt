@@ -1,0 +1,4 @@
+# Lista de bibliotecas que o Render instala antes de ligar o servidor
+fastapi
+# uvicorn é quem "liga" o FastAPI e escuta os pedidos pela internet
+uvicorn[standard]
