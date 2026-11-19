@@ -2,3 +2,7 @@
 fastapi
 # uvicorn é quem "liga" o FastAPI e escuta os pedidos pela internet
 uvicorn[standard]
+# SQLAlchemy: deixa a gente falar com o banco usando classes Python em vez de SQL puro
+sqlalchemy>=2.0
+# psycopg: o "driver" que conversa com o Postgres (versão binária, não precisa compilar)
+psycopg[binary]
