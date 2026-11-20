@@ -6,3 +6,9 @@ uvicorn[standard]
 sqlalchemy>=2.0
 # psycopg: o "driver" que conversa com o Postgres (versão binária, não precisa compilar)
 psycopg[binary]
+# argon2-cffi: faz o HASH das senhas (padrão atual recomendado)
+argon2-cffi
+# PyJWT: cria e confere os tokens de login
+pyjwt
+# email-validator: o FastAPI usa para conferir se um e-mail tem formato válido
+email-validator
