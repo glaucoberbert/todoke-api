@@ -1,18 +1,18 @@
 # main.py — servidor do Todoke (Parte 1 do TCC)
-# Etapa 5: + dados de cada motoboy (estado, turnos fechados, clientes) em rotas_dados.py.
+# Etapa 6a: + CORS, para o app (no GitHub Pages) poder falar com o servidor.
 
 import logging
 from contextlib import asynccontextmanager
 
 from fastapi import Depends, FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware  # NOVO
 from sqlalchemy import func, select, text
 from sqlalchemy.orm import Session
 
 from database import Base, engine, get_db
 from models import Motoboy  # importar aqui faz o SQLAlchemy "conhecer" a tabela
 from rotas_auth import router as router_auth  # rotas de cadastro/login
-from rotas_dados import router as router_dados  # NOVO: rotas dos dados de cada motoboy
-# (o rotas_dados já importa o models_dados, então as 3 tabelas novas são criadas no início)
+from rotas_dados import router as router_dados  # rotas dos dados de cada motoboy
 
 log = logging.getLogger(__name__)
 
@@ -26,10 +26,21 @@ async def ciclo_de_vida(app: FastAPI):
 
 
 # Cria o aplicativo e liga o código de inicialização acima.
-app = FastAPI(title="Todoke API", version="0.5.0", lifespan=ciclo_de_vida)
+app = FastAPI(title="Todoke API", version="0.6.0", lifespan=ciclo_de_vida)
+
+# NOVO: CORS. O navegador só deixa uma página falar com OUTRO endereço se esse endereço
+# disser que permite. Aqui o servidor diz: "aceito pedidos vindos do site do Todoke".
+# Só o site listado passa; qualquer outro site é barrado pelo navegador.
+ORIGENS_PERMITIDAS = ["https://glaucoberbert.github.io"]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=ORIGENS_PERMITIDAS,
+    allow_methods=["GET", "POST", "PUT", "DELETE"],
+    allow_headers=["Authorization", "Content-Type"],  # o token vai no cabeçalho Authorization
+)
 
 app.include_router(router_auth)
-app.include_router(router_dados)  # NOVO
+app.include_router(router_dados)
 
 
 @app.get("/")
