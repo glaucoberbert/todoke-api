@@ -1,5 +1,5 @@
 # main.py — servidor do Todoke (Parte 1 do TCC)
-# Etapa 3: + cadastro, login e rota /eu (ficam no arquivo rotas_auth.py).
+# Etapa 5: + dados de cada motoboy (estado, turnos fechados, clientes) em rotas_dados.py.
 
 import logging
 from contextlib import asynccontextmanager
@@ -10,7 +10,9 @@ from sqlalchemy.orm import Session
 
 from database import Base, engine, get_db
 from models import Motoboy  # importar aqui faz o SQLAlchemy "conhecer" a tabela
-from rotas_auth import router as router_auth  # NOVO: rotas de cadastro/login
+from rotas_auth import router as router_auth  # rotas de cadastro/login
+from rotas_dados import router as router_dados  # NOVO: rotas dos dados de cada motoboy
+# (o rotas_dados já importa o models_dados, então as 3 tabelas novas são criadas no início)
 
 log = logging.getLogger(__name__)
 
@@ -24,10 +26,10 @@ async def ciclo_de_vida(app: FastAPI):
 
 
 # Cria o aplicativo e liga o código de inicialização acima.
-app = FastAPI(title="Todoke API", version="0.3.0", lifespan=ciclo_de_vida)
+app = FastAPI(title="Todoke API", version="0.5.0", lifespan=ciclo_de_vida)
 
-# NOVO: liga ao servidor as rotas definidas em rotas_auth.py
 app.include_router(router_auth)
+app.include_router(router_dados)  # NOVO
 
 
 @app.get("/")
