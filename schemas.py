@@ -25,11 +25,32 @@ class TokenSaida(BaseModel):
 
 
 class MotoboySaida(BaseModel):
-    # Dados que podem SAIR da API. Repare: NÃO tem senha_hash,
-    # então ele nunca vaza, mesmo que a gente devolva o motoboy inteiro.
+    # Dados que podem SAIR da API. Repare: NÃO tem senha_hash nem código,
+    # então eles nunca vazam, mesmo que a gente devolva o motoboy inteiro.
     model_config = ConfigDict(from_attributes=True)  # permite montar a partir do objeto do banco
 
     id: int
     nome: str
     email: str
     email_confirmado: bool
+
+
+# NOVO: resposta do cadastro = dados do motoboy + aviso se o e-mail com o código saiu.
+class CadastroSaida(MotoboySaida):
+    codigo_enviado: bool = True
+
+
+# NOVO: entrada de "confirmar e-mail".
+class ConfirmarEmailEntrada(BaseModel):
+    email: EmailStr
+    codigo: str = Field(pattern=r"^\d{6}$")  # exatamente 6 dígitos
+
+
+# NOVO: entrada de "reenviar código".
+class ReenviarCodigoEntrada(BaseModel):
+    email: EmailStr
+
+
+# NOVO: resposta simples com uma mensagem.
+class MensagemSaida(BaseModel):
+    mensagem: str

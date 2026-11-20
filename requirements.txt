@@ -12,3 +12,5 @@ argon2-cffi
 pyjwt
 # email-validator: o FastAPI usa para conferir se um e-mail tem formato válido
 email-validator
+# httpx: faz chamadas HTTPS a outros serviços (usamos para falar com a API do Brevo)
+httpx
